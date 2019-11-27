@@ -1,6 +1,0 @@
-note over browser:
-User clicks submit button, e.preventDefault() in form submit event handler prevents page to reload
-end note
-
-browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
-server-->browser: Status code is 201, body is {"message":"note created"}
