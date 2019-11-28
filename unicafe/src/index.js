@@ -76,7 +76,7 @@ const App = () => {
         },
         {
             text: 'positive',
-            value: (good || neutral || bad) ? (good/(good+neutral+bad)) : 0,
+            value: (good || neutral || bad) ? (good/(good+neutral+bad))*100 : 0,
             measurements: ' %'
         }
     ]
