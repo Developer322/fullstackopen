@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom'
 import PersonForm from './components/personform.js'
 import Persons from './components/persons.js'
 import Filter from './components/filter.js'
-
-import axios from 'axios'
+import {getAll, addPerson, deletePerson, updateUserNumber} from './services/persons.js'
 
 const App = () => {
     const [ newName, setNewName ] = useState('')
@@ -12,17 +11,33 @@ const App = () => {
     const [ filterText, setFilterText ] = useState('')
     const [ persons, setPersons ] = useState([])
 
-    useEffect(() => {
-      axios
-        .get('http://localhost:3001/persons')
-        .then(response => {
-          setPersons(response.data)
-        })
-    }, [])
+    useEffect(() => getAll().then(response => setPersons(response)), [])
 
-    const onPersonAdded = (e) =>{
+    const onPersonAdded = e =>{
         e.preventDefault()
-        !persons.find( person => person.name == newName) ? setPersons([...persons, {name: newName, number: newNumber}]) : alert(`${newName} is already added to phonebook`)
+        const foundPerson = persons.find( person => person.name == newName)
+        if(foundPerson){
+          if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+            const updatedPerson = {
+              ...foundPerson, 
+              number: newNumber
+            }
+
+            updateUserNumber(updatedPerson)
+              .then( response => 
+                setPersons(persons.map( person => person.id == response.id ? response : person ))
+                )
+          }
+          
+          return
+        }
+
+        const newPerson = {
+          name: newName, 
+          number: newNumber
+        }
+
+        addPerson(newPerson).then(response => setPersons([...persons, {...response}]))
     }
     
     const onNameChanged = e => setNewName(e.target.value)
@@ -30,6 +45,8 @@ const App = () => {
     const onNumberChanged = e => setNewNumber(e.target.value)
 
     const onFilterChanged = e => setFilterText(e.target.value)
+
+    const onPersonDeleted = (id, name) => e => window.confirm(`Delete ${name}?`) && deletePerson(id).then(response => setPersons( persons.filter( person => person.id != id) ))
 
     return (
       <div>
@@ -43,7 +60,7 @@ const App = () => {
   
         <h3>Numbers</h3>
   
-        <Persons persons={persons} filter={filterText} />
+        <Persons persons={persons} filter={filterText} deleteHandler={onPersonDeleted} />
       </div>
     )
   }
