@@ -22,7 +22,7 @@ const App = () => {
         if(foundPerson){
           if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
             const updatedPerson = {
-              ...foundPerson, 
+              ...foundPerson,
               number: newNumber
             }
 
