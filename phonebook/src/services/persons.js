@@ -7,7 +7,7 @@ const getAll = showError =>
         .get(baseUrl)
             .then(response => response.data)
                 .catch(error => {
-                    showError(`Error: ${error}`, 'error')
+                    showError(`Error: ${error.response.data.error}`, 'error')
                     throw error
                 })
 
@@ -16,7 +16,7 @@ const addPerson = (newPerson, showError) =>
         .post(baseUrl, newPerson)
             .then(response => response.data)
                 .catch(error => {
-                    showError(`Error: ${error}`, 'error')
+                    showError(`Error: ${error.response.data.error}`, 'error')
                     throw error
                 })
 
@@ -25,7 +25,7 @@ const deletePerson = (id, showError) =>
         .delete(`${baseUrl}/${id}`)
             .then(response => response.data)
                 .catch(error => {
-                    showError(`Error: ${error}`, 'error')
+                    showError(`Error: ${error.response.data.error}`, 'error')
                     throw error
                 })
 
