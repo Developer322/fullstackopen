@@ -28,7 +28,6 @@ const Blog = ({ blog, onLikeBlog, onDeleteBlog, username }) => {
       <div>
         {`added by ${blog.author}`}
       </div>
-      {`${username} ${blog.user && blog.user.username}`}
       {blog.user && username === blog.user.username && <button onClick={() => onDeleteBlog(blog.id, blog.title)}>remove</button>}
     </div>)
   }
@@ -71,3 +70,5 @@ const BlogContainer = ({ username, logoutHandler, blogs, title, onTitleChange, a
 </>
 
 export default BlogContainer
+//this export needs for testing
+export { Blog }
