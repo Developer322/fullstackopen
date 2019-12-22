@@ -14,7 +14,7 @@ const Blog = ({ blog, onLikeBlog, onDeleteBlog, username }) => {
 //username must be unique so we can use it to identify user(not user id)
   const [detailed, setDetailed] = useState(false)
   if(detailed){
-    return(<div style={blogStyle}>
+    return(<div style={blogStyle} className='blogTile'>
       <div onClick={() => setDetailed(!detailed)}>
         {blog.title}
       </div>
@@ -32,7 +32,7 @@ const Blog = ({ blog, onLikeBlog, onDeleteBlog, username }) => {
     </div>)
   }
 
-  return(<div style={blogStyle} onClick={() => setDetailed(!detailed)}>
+  return(<div style={blogStyle} onClick={() => setDetailed(!detailed)} className='blogTile'>
     {`${blog.title} ${blog.author}`}
   </div>)
 }

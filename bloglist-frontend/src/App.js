@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { login } from './services/login.js'
-import { getAllBlogs, setToken, createBlog, updateBlog, deleteBlog } from './services/blogs.js'
+import { getAllBlogs, setToken, createBlog, updateBlog, deleteBlog } from './services/blogs'
 import LoginContainer from './components/LoginContainer.js'
 import BlogContainer from './components/BlogContainer.js'
 
