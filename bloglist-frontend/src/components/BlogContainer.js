@@ -40,11 +40,11 @@ const Blog = ({ blog, onLikeBlog, onDeleteBlog, username }) => {
 const NewBlogForm = ({ title, onTitleChange, author, onAuthorChange, url, onUrlChange, onCreateBlog }) =>
   <div>
     <label htmlFor='title'>title:</label>
-    <input value={title} onChange={e => onTitleChange(e.target.value)} name='title'/>
+    <input value={title} onChange={onTitleChange} name='title'/>
     <label htmlFor='author'>author:</label>
-    <input value={author} onChange={e => onAuthorChange(e.target.value)} name='author'/>
+    <input value={author} onChange={onAuthorChange} name='author'/>
     <label htmlFor='url'>url:</label>
-    <input value={url} onChange={e => onUrlChange(e.target.value)} name='url'/>
+    <input value={url} onChange={onUrlChange} name='url'/>
     <button onClick={ () => onCreateBlog(title, author, url) }>create</button>
   </div>
 

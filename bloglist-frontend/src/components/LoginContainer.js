@@ -12,7 +12,7 @@ const LoginContainer = ({ password, onPasswordChanged, username, onUsernameChang
           value={username}
           placeholder='username'
           name='username'
-          onChange={ e => onUsernameChanged(e.target.value) }
+          onChange={ onUsernameChanged }
         />
       </div>
       <div>
@@ -21,7 +21,7 @@ const LoginContainer = ({ password, onPasswordChanged, username, onUsernameChang
           value={password}
           placeholder='password'
           name='password'
-          onChange={ e => onPasswordChanged(e.target.value) }
+          onChange={ onPasswordChanged }
         />
       </div>
       <button onClick={onLogin}>login</button>

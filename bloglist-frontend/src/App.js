@@ -3,6 +3,7 @@ import { login } from './services/login.js'
 import { getAllBlogs, setToken, createBlog, updateBlog, deleteBlog } from './services/blogs'
 import LoginContainer from './components/LoginContainer.js'
 import BlogContainer from './components/BlogContainer.js'
+import  { useField } from './hooks/index.js'
 
 const sortBlogsByLikesAsc = blogs => [...blogs].sort((a, b) => {
   if (a.likes>b.likes) {
@@ -16,13 +17,13 @@ const sortBlogsByLikesAsc = blogs => [...blogs].sort((a, b) => {
 )
 
 const App = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const username = useField('text')
+  const password = useField('text')
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const title = useField('text')
+  const author = useField('text')
+  const url = useField('text')
   const [message, setMessage] = useState(null)
   const [statusMessage, setStatusMessage] = useState('info')
 
@@ -40,7 +41,7 @@ const App = () => {
   const onLogin = async e => {
     e.preventDefault()
     try {
-      const user = await login({ username, password })
+      const user = await login({ username: username.value, password: password.value })
 
       const fetchedBlogs = await getAllBlogs(user.token)
 
@@ -48,8 +49,8 @@ const App = () => {
 
       setToken(user.token)
       setBlogs(sortBlogsByLikesAsc(fetchedBlogs))
-      setUsername('')
-      setPassword('')
+      username.reset()
+      password.reset()
       setUser(user)
       showMessage(`you log in as ${user.username}`)
     } catch (exception) {
@@ -71,18 +72,24 @@ const App = () => {
     setTimeout(() => setMessage(null), 3000)
   }
 
-  const onTitleChange = title => setTitle(title)
+  /*const onTitleChange = title => setTitle(title)
 
   const onAuthorChange = author => setAuthor(author)
 
-  const onUrlChange = url => setUrl(url)
+  const onUrlChange = url => setUrl(url)*/
 
-  const onCreateBlog = async (title, author, url) => {
+  const onCreateBlog = async (newTitle, newAuthor, newUrl) => {
     try{
-      const newBlog = await createBlog({ title, author, url })
+      const newBlog = await createBlog({ title: newTitle, author: newAuthor, url: newUrl })
       //setBlogs(sortBlogsByLikesAsc([...blogs, newBlog]))
-      getAllBlogs(user.token).then( response => setBlogs(sortBlogsByLikesAsc(response)))
-      showMessage(`${newBlog.title} added`)
+      getAllBlogs(user.token).then( response => {
+        setBlogs(sortBlogsByLikesAsc(response))
+        title.reset()
+        author.reset()
+        url.reset()
+        showMessage(`${newBlog.title} added`)
+      })
+      
     }catch(exception) {
       showMessage(exception.response.data.error || exception.message, 'error')
     }
@@ -92,8 +99,14 @@ const App = () => {
     try{
       const updatedBlog = await updateBlog(id, { likes: blogs.find( blog => blog.id === id).likes + 1 } )
       //setBlogs(sortBlogsByLikesAsc(blogs.map(blog => blog.id != id ? blog : updatedBlog)))
-      getAllBlogs(user.token).then( response => setBlogs(sortBlogsByLikesAsc(response)))
-      showMessage(`${updatedBlog.title} liked`)
+      getAllBlogs(user.token).then( response => {
+        setBlogs(sortBlogsByLikesAsc(response))
+        title.reset()
+        author.reset()
+        url.reset()
+        showMessage(`${updatedBlog.title} liked`)
+      })
+      
     }catch(exception) {
       showMessage(exception.response.data.error || exception.message, 'error')
     }
@@ -112,17 +125,17 @@ const App = () => {
     }
   }
 
-  const onUsernameChanged = username => setUsername(username)
+  /*const onUsernameChanged = username => setUsername(username)
 
-  const onPasswordChanged = password => setPassword(password)
+  const onPasswordChanged = password => setPassword(password)*/
 
   return (
     <div>
       {user === null && <LoginContainer
-        password={password}
-        onPasswordChanged={onPasswordChanged}
-        username={username}
-        onUsernameChanged={onUsernameChanged}
+        password={password.value}
+        onPasswordChanged={password.onChange}
+        username={username.value}
+        onUsernameChanged={username.onChange}
         onLogin={onLogin}
         message={message}
         statusMessage={statusMessage}
@@ -131,12 +144,12 @@ const App = () => {
         username={user.username}
         logoutHandler={logoutHandler}
         blogs={blogs}
-        title={title}
-        onTitleChange={onTitleChange}
-        author={author}
-        onAuthorChange={onAuthorChange}
-        url={url}
-        onUrlChange={onUrlChange}
+        title={title.value}
+        onTitleChange={title.onChange}
+        author={author.value}
+        onAuthorChange={author.onChange}
+        url={url.value}
+        onUrlChange={url.onChange}
         onCreateBlog={onCreateBlog}
         message={message}
         statusMessage={statusMessage}
