@@ -28,8 +28,8 @@ const initialState = anecdotesAtStart.map(asObject).sort((a, b) => {
 })
 
 const reducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
+  //console.log('state now: ', state)
+  //console.log('action', action)
   switch (action.type) {
     case 'ADD_ANECDOTE':
       return state.concat(asObject(action.anecdote))

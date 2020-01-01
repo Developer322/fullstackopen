@@ -1,16 +1,41 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { clearNotification } from '../reducers/notificationReducer.js'
 
-const Notification = () => {
+let timeout = null
+
+const Notification = ({ notifications, clearNotification }) => {
   const style = {
     border: 'solid',
     padding: 10,
     borderWidth: 1
   }
-  return (
+
+  if(timeout){
+    clearTimeout(timeout)
+  }
+
+  if(notifications.length){
+    timeout = setTimeout( () => clearNotification(), 3000 )
+    return (
     <div style={style}>
-      render here notification...
-    </div>
-  )
+      {notifications}
+    </div>)
+  }else{
+    return null
+  }
+  
 }
 
-export default Notification
+const mapDispatchToProps = {
+  clearNotification
+}
+
+const mapStateToProps = state => ({
+  notifications: state.notifications,
+})
+
+export default connect(
+  mapStateToProps, 
+  mapDispatchToProps
+)(Notification)
