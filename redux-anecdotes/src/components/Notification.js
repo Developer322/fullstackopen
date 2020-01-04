@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { clearNotification } from '../reducers/notificationReducer.js'
 
-let timeout = null
+//let timeout = null
 
 const Notification = ({ notifications, clearNotification }) => {
   const style = {
@@ -11,12 +11,12 @@ const Notification = ({ notifications, clearNotification }) => {
     borderWidth: 1
   }
 
-  if(timeout){
+  /*if(timeout){
     clearTimeout(timeout)
-  }
+  }*/
 
   if(notifications.length){
-    timeout = setTimeout( () => clearNotification(), 3000 )
+    //timeout = setTimeout( () => clearNotification(), 3000 )
     return (
     <div style={style}>
       {notifications}

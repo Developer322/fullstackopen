@@ -10,8 +10,16 @@ const reducer = (state = '', action) => {
   }
 }
 
-export const showNotification = notification => ({ type: 'SHOW_NOTIFICATION', notification: notification })
+let timeout = null
 
 export const clearNotification = () => ({ type: 'CLEAR_NOTIFICATION' })
+
+export const showNotification = (notification, seconds = 3) => async dispatch => {
+  if(timeout){
+    clearTimeout(timeout)
+  }
+  timeout = setTimeout( () => dispatch(clearNotification()), seconds*1000 )
+  dispatch({ type: 'SHOW_NOTIFICATION', notification: notification })
+}
 
 export default reducer

@@ -1,3 +1,5 @@
+import { getAllAnecdotes, createNewAnecdote, changeVotes } from '../services/anecdotes.js'
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -9,7 +11,7 @@ const anecdotesAtStart = [
 
 const getId = () => (100000 * Math.random()).toFixed(0)
 
-const asObject = anecdote => {
+export const asObject = anecdote => {
   return {
     content: anecdote,
     id: getId(),
@@ -17,7 +19,7 @@ const asObject = anecdote => {
   }
 }
 
-const initialState = anecdotesAtStart.map(asObject).sort((a, b) => {
+const comparer = (a, b) => {
   if (a.votes<b.votes) {
     return 1;
   }
@@ -25,31 +27,38 @@ const initialState = anecdotesAtStart.map(asObject).sort((a, b) => {
     return -1;
   }
   return 0;
-})
+}
+
+const initialState = anecdotesAtStart.map(asObject).sort(comparer)
 
 const reducer = (state = initialState, action) => {
   //console.log('state now: ', state)
   //console.log('action', action)
   switch (action.type) {
     case 'ADD_ANECDOTE':
-      return state.concat(asObject(action.anecdote))
+      return state.concat(action.anecdote)
     case 'VOTE_FOR_ANECDOTE':
-      return state.map( anecdote => anecdote.id === action.anecdoteId ? { ...anecdote, votes: anecdote.votes+1 } : anecdote ).sort((a, b) => {
-        if (a.votes<b.votes) {
-          return 1;
-        }
-        if (a.votes>b.votes) {
-          return -1;
-        }
-        return 0;
-      })
+      return state.map( anecdote => anecdote.id === action.anecdoteId ? { ...anecdote, votes: anecdote.votes+1 } : anecdote ).sort(comparer)
+    case 'INIT_ANECDOTES':
+      return action.anecdotes.sort(comparer)
     default:
       return state
   }
 }
 
-export const createAnecdote = anecdote => ({ type: 'ADD_ANECDOTE', anecdote: anecdote })
+export const createAnecdote = newAnecdote => async dispatch => {
+    const anecdote = await createNewAnecdote(newAnecdote)
+    dispatch({ type: 'ADD_ANECDOTE', anecdote: anecdote })
+  }
 
-export const voteForAnecdote = anecdoteId => ({ type: 'VOTE_FOR_ANECDOTE', anecdoteId: anecdoteId })
+export const initAnecdotes = () => async dispatch => {
+    const anecdotes = await getAllAnecdotes()
+    dispatch({ type: 'INIT_ANECDOTES', anecdotes: anecdotes })
+  }
+
+export const voteForAnecdote = ( anecdoteId, votes) => async dispatch => {
+    await changeVotes(anecdoteId, votes + 1)
+    dispatch({ type: 'VOTE_FOR_ANECDOTE', anecdoteId: anecdoteId, votes: votes + 1 })
+  }
 
 export default reducer

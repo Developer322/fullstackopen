@@ -5,9 +5,9 @@ import { connect } from 'react-redux'
 
 const AnecdotesList = ({ visibleAnecdotes, voteForAnecdote, showNotification, clearNotification }) => {
 
-  const vote = (id, content) => {
-    voteForAnecdote(id)
-    showNotification(`you voted '${content}'`)
+  const vote = (id, content, votes) => {
+    voteForAnecdote(id, votes)
+    showNotification(`you voted '${content}'`, 5)
     /*const timeout = setTimeout( () => clearNotification(), 3000 )
     const unsubscribe = store.subscribe(() => {
       clearTimeout(timeout)
@@ -24,7 +24,7 @@ const AnecdotesList = ({ visibleAnecdotes, voteForAnecdote, showNotification, cl
     </div>
     <div>
       has {anecdote.votes}
-      <button onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
+      <button onClick={() => vote(anecdote.id, anecdote.content, anecdote.votes)}>vote</button>
     </div>
   </div>
   )}
