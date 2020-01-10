@@ -5,8 +5,7 @@ import { connect } from 'react-redux'
 import { initBlogs } from './reducers/blogsReducer.js'
 import { initUsers } from './reducers/usersReducer.js'
 import { setUser } from './reducers/userReducer.js'
-import Navigation from './components/Navigation.js'
-import { BrowserRouter as Router, Route, Redirect, Link, withRouter } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import UsersList from './components/usersList.js'
 import User from './components/User.js'
 import Blog from './components/Blog.js'
@@ -25,24 +24,22 @@ const App = ({ user, setUser, initBlogs, initUsers, users, blogs }) => {
     }
   }, [])
 
-  
-  
-  const userById = id => users.find(user => user.id == id)
+  const userById = id => users.find(user => user.id === id)
 
-  const blogById = id => blogs.find(blog => blog.id == id)
+  const blogById = id => blogs.find(blog => blog.id === id)
 
   const userIsLoggedIn = () => user && Object.entries(user).length > 0
 
   return (
-      <Router>
-          <UserInfo />
-          <Route exact path="/" render={() => <Redirect to="/users" /> } />
-          <Route exact path="/login" render={() => <LoginContainer /> } />
-          <Route exact path="/blogs" render={() => userIsLoggedIn() ? <BlogContainer /> : <Redirect to="/login" />} />
-          <Route exact path="/users" render={() => userIsLoggedIn() ?  <UsersList />  : <Redirect to="/login" />} />
-          <Route exact path="/users/:id" render={({ match }) => userIsLoggedIn() ? <User user={userById(match.params.id)}  /> : <Redirect to="/login" />} />
-          <Route exact path="/blogs/:id" render={({ match }) => userIsLoggedIn() ? <Blog blog={blogById(match.params.id)}  /> : <Redirect to="/login" />} />
-      </Router>
+    <Router>
+      <UserInfo />
+      <Route exact path="/" render={() => <Redirect to="/users" /> } />
+      <Route exact path="/login" render={() => <LoginContainer /> } />
+      <Route exact path="/blogs" render={() => userIsLoggedIn() ? <BlogContainer /> : <Redirect to="/login" />} />
+      <Route exact path="/users" render={() => userIsLoggedIn() ?  <UsersList />  : <Redirect to="/login" />} />
+      <Route exact path="/users/:id" render={({ match }) => userIsLoggedIn() ? <User user={userById(match.params.id)}  /> : <Redirect to="/login" />} />
+      <Route exact path="/blogs/:id" render={({ match }) => userIsLoggedIn() ? <Blog blog={blogById(match.params.id)}  /> : <Redirect to="/login" />} />
+    </Router>
   )
 }
 

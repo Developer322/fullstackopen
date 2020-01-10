@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { clearNotification } from '../reducers/notificationReducer.js'
 
-const Notification = ({ notification, clearNotification }) => {
+const Notification = ({ notification }) => {
   if (notification.message === null) {
     return null
   }
@@ -34,15 +33,11 @@ const notificationStyles = {
   }
 }
 
-const mapDispatchToProps = {
-  clearNotification
-}
 
 const mapStateToProps = state => ({
   notification: state.notification
 })
 
 export default connect(
-  mapStateToProps, 
-  mapDispatchToProps
+  mapStateToProps
 )(Notification)

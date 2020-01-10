@@ -7,65 +7,66 @@ import { login } from '../services/login.js'
 import { setUser } from '../reducers/userReducer.js'
 import { initBlogs } from '../reducers/blogsReducer.js'
 import { initUsers } from '../reducers/usersReducer.js'
-import { Table, Form, Button } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 
 const LoginContainer = ({ setUser, showNotification }) =>
-  {
+{
+  const username = useField('text')
+  const password = useField('text')
 
-    const username = useField('text')
-    const password = useField('text')
-
-    const onLogin = async e => {
-      e.preventDefault()
-      try {
-        const user = await login({ username: username.value, password: password.value })
-        window.localStorage.setItem('blogsListUser', JSON.stringify(user))
-        username.reset()
-        password.reset()
-        showNotification({ message: `you log in as ${user.username}`, status: 'info'})
-        initBlogs()
-        initUsers()
-        setUser(user)
-      } catch (exception) {
-        showNotification({ message: exception.response.data.error || exception.message, status: 'error'})
-      }
+  const onLogin = async e => {
+    e.preventDefault()
+    try {
+      const user = await login({ username: username.value, password: password.value })
+      window.localStorage.setItem('blogsListUser', JSON.stringify(user))
+      username.reset()
+      password.reset()
+      showNotification({ message: `you log in as ${user.username}`, status: 'info' })
+      initBlogs()
+      initUsers()
+      setUser(user)
+    } catch (exception) {
+      showNotification({ message: exception.response.data.error || exception.message, status: 'error' })
     }
-
-    return(<>
-    <h2>Log in to application</h2>
-    <Notification />
-    <Form>
-      <div>
-        <Form.Control
-          type='text'
-          value={username.value}
-          placeholder='username'
-          name='username'
-          onChange={ username.onChange }
-        />
-      </div>
-      <div>
-        <Form.Control
-          type='password'
-          value={password.value}
-          placeholder='password'
-          name='password'
-          onChange={ password.onChange }
-        />
-      </div>
-      <Button onClick={onLogin}>login</Button>
-    </Form>
-  </>)
   }
 
-  const mapDispatchToProps = {
-    showNotification,
-    setUser,
-    initBlogs,
-    initUsers
-  }
-  
-  export default connect(
-    null, 
-    mapDispatchToProps
-  )(LoginContainer)
+  return(<>
+  <h2>Log in to application</h2>
+  <Notification />
+  <Form>
+    <div>
+      <Form.Control
+        id='username'
+        type='text'
+        value={username.value}
+        placeholder='username'
+        name='username'
+        onChange={ username.onChange }
+      />
+    </div>
+    <div>
+      <Form.Control
+        id='password'
+        type='password'
+        value={password.value}
+        placeholder='password'
+        name='password'
+        onChange={ password.onChange }
+      />
+    </div>
+    <Button onClick={onLogin}>login</Button>
+  </Form>
+</>)
+}
+
+const mapDispatchToProps = {
+  showNotification,
+  setUser,
+  initBlogs,
+  initUsers
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(LoginContainer)

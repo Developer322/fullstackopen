@@ -4,38 +4,38 @@ const baseUrl = '/api/blogs'
 let token = null
 
 const blogs = [
-    {
-      title:'test title',
-      author:'test author',
-      url:'test url',
-      user:{
-          username:'testusername',
-          name:'qwe'
-      },
-      likes:3
+  {
+    title:'test title',
+    author:'test author',
+    url:'test url',
+    user:{
+      username:'testusername',
+      name:'qwe'
     },
-    {
-        title:'test title2',
-        author:'test author2',
-        url:'test url2',
-        user:{
-            username:'testusername2',
-            name:'qwe2'
-        },
-        likes:4
-      },
-      {
-        title:'test title3',
-        author:'test author3',
-        url:'test url3',
-        user:{
-            username:'testusername3',
-            name:'qwe3'
-        },
-        likes:5
-      }
-  ]
-  
+    likes:3
+  },
+  {
+    title:'test title2',
+    author:'test author2',
+    url:'test url2',
+    user:{
+      username:'testusername2',
+      name:'qwe2'
+    },
+    likes:4
+  },
+  {
+    title:'test title3',
+    author:'test author3',
+    url:'test url3',
+    user:{
+      username:'testusername3',
+      name:'qwe3'
+    },
+    likes:5
+  }
+]
+
 const getAllBlogs = () => Promise.resolve(blogs)
 
 const setToken = newToken => {

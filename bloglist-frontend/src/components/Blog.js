@@ -28,7 +28,7 @@ const Blog = ({ blog, likeBlog, commentBlog }) => {
       </div>
       <ul>
         {
-          blog.comments && blog.comments.map( blog => <li>{blog}</li>)
+          blog.comments && blog.comments.map( blog => <li key={blog.id}>{blog}</li>)
         }
       </ul>
       <form onSubmit={onComment}>
@@ -40,15 +40,15 @@ const Blog = ({ blog, likeBlog, commentBlog }) => {
 }
 
 const mapDispatchToProps = {
-    likeBlog,
-    commentBlog
+  likeBlog,
+  commentBlog
 }
-  
+
 const mapStateToProps = (state, ownProps) => ({
-    blog: ownProps.blog
+  blog: ownProps.blog
 })
 
 export default connect(
-    mapStateToProps, 
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Blog)

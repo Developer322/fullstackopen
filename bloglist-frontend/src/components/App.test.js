@@ -27,12 +27,12 @@ describe('<App />', () => {
       token: '1231231214',
       name: 'Test User'
     }
-    
-    localStorage.setItem('blogsListUser', JSON.stringify(user)) 
+
+    localStorage.setItem('blogsListUser', JSON.stringify(user))
 
     const component = render(<App />)
 
-    await waitForElement( () => component.container.querySelector('.blogTile') ) 
+    await waitForElement( () => component.container.querySelector('.blogTile') )
 
     const blogs = component.container.querySelectorAll('.blogTile')
     expect(blogs.length).toBe(3)

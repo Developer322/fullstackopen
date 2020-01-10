@@ -2,7 +2,7 @@ import React from 'react'
 import Notification from './Notification.js'
 
 const User = ({ user }) => {
-  if ( user === undefined) { 
+  if ( user === undefined) {
     return null
   }
 
@@ -12,7 +12,7 @@ const User = ({ user }) => {
       <h2>{user.username}</h2>
       <h3>added blogs</h3>
       <ul>
-        {user.blogs.map( blog => <li>{blog.title}</li>)}
+        {user.blogs.map( blog => <li key={blog.id}>{blog.title}</li>)}
       </ul>
     </div>
   )

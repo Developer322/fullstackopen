@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Notification from './Notification.js'
 import Togglable from './Togglable.js'
 import { connect } from 'react-redux'
 import  { useField } from '../hooks/index.js'
 import { showNotification } from '../reducers/notificationReducer.js'
 import { likeBlog, addBlog, removeBlog } from '../reducers/blogsReducer.js'
-import UserInfo from './UserInfo.js'
 import { Link } from 'react-router-dom'
 
-const NewBlogForm = ({ title, onTitleChange, author, onAuthorChange, url, onUrlChange, onCreateBlog, token }) =>
+const NewBlogForm = ({ title, onTitleChange, author, onAuthorChange, url, onUrlChange, onCreateBlog }) =>
   <div>
     <label htmlFor='title'>title:</label>
     <input value={title} onChange={onTitleChange} name='title'/>
@@ -19,12 +18,12 @@ const NewBlogForm = ({ title, onTitleChange, author, onAuthorChange, url, onUrlC
     <button onClick={ () => onCreateBlog(title, author, url) }>create</button>
   </div>
 
-const BlogContainer = ({ blogs, user, clearUser, showNotification, likeBlog, addBlog, removeBlog }) =>
+const BlogContainer = ({ blogs, showNotification, addBlog }) =>
 {
   const title = useField('text')
   const author = useField('text')
   const url = useField('text')
-  
+
   const onCreateBlog = async (newTitle, newAuthor, newUrl) => {
     try{
       await addBlog(newTitle, newAuthor, newUrl)
@@ -32,29 +31,7 @@ const BlogContainer = ({ blogs, user, clearUser, showNotification, likeBlog, add
       author.reset()
       url.reset()
     }catch(exception) {
-      showNotification({ message: exception.response.data.error || exception.message, status: 'error'})
-    }
-  }
-  
-  const onLikeBlog = async (id, likes) => {
-    try{
-      await likeBlog(id, likes)
-      title.reset()
-      author.reset()
-      url.reset()
-    }catch(exception) {
-      showNotification({ message: exception.response.data.error || exception.message, status: 'error'})
-    }
-  }
-  
-  const onDeleteBlog = async (id, title) => {
-    if(!window.confirm(`remove blog ${title}`)){
-      return
-    }
-    try{
-      await removeBlog(id, title)
-    }catch(exception) {
-      showNotification({ message: exception.response.data.error || exception.message, status: 'error'})
+      showNotification({ message: exception.response.data.error || exception.message, status: 'error' })
     }
   }
 
@@ -62,10 +39,10 @@ const BlogContainer = ({ blogs, user, clearUser, showNotification, likeBlog, add
   <h2>blogs</h2>
   <Notification />
   {blogs.map(blog =>
-    <div>
+    <div key={blog.id}>
       <Link to={`/blogs/${blog.id.toString()}`}>{blog.title}</Link>
     </div>
-    
+
   )}
   <Togglable buttonLabel='new blog'>
     <NewBlogForm
@@ -83,8 +60,8 @@ const BlogContainer = ({ blogs, user, clearUser, showNotification, likeBlog, add
 
 const mapDispatchToProps = {
   showNotification,
-  likeBlog, 
-  addBlog, 
+  likeBlog,
+  addBlog,
   removeBlog
 }
 
@@ -94,6 +71,6 @@ const mapStateToProps = state => ({
 })
 
 export default connect(
-  mapStateToProps, 
+  mapStateToProps,
   mapDispatchToProps
 )(BlogContainer)
